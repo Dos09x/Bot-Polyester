@@ -1,0 +1,3 @@
+
+polyester-sdk==0.1.0a55
+python-dotenv==1.1.1

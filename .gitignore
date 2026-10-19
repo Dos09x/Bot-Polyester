@@ -1,0 +1,32 @@
+# ─── Kredensial — JANGAN pernah commit file ini ───────────────────────────────
+.env
+
+# ─── Virtual environment ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ─── Python cache ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ─── Log runtime ──────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── State bot (dikelola runtime, bukan git) ──────────────────────────────────
+bot_state.json
+bot_state.json.tmp
+
+# ─── File debug / scratch ─────────────────────────────────────────────────────
+check_scale.py
+scratch/
+
+# ─── OS & editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

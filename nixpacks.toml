@@ -1,0 +1,8 @@
+[phases.install]
+cmds = [
+  "python -m venv .venv",
+  ".venv/bin/pip install --no-cache-dir -r requirements.txt"
+]
+
+[start]
+cmd = ".venv/bin/python bot.py"

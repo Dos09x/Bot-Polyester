@@ -1,9 +1,11 @@
 from __future__ import annotations
 import asyncio
+import http.server
 import inspect
 import json
 import logging
 import os
+import threading
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -12,6 +14,35 @@ from enum import Enum
 from pathlib import Path
 from uuid import uuid4
 from dotenv import load_dotenv
+
+
+# ═══════════════════════════════════════════════════════════════════
+# HEALTH CHECK SERVER (untuk platform PaaS / Inhank Cloud)
+# Platform expect HTTP response agar deployment dianggap sehat.
+# Bot bukan web app, jadi kita jalankan mini HTTP server di thread.
+# ═══════════════════════════════════════════════════════════════════
+
+def _start_health_server() -> None:
+    port = int(os.getenv("PORT", "8080"))
+
+    class _Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            body = b"OK"
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *_):  # suppress access log spam
+            pass
+
+    srv = http.server.HTTPServer(("0.0.0.0", port), _Handler)
+    srv.serve_forever()
+
+
+_health_thread = threading.Thread(target=_start_health_server, daemon=True)
+_health_thread.start()
 
 # ── Import kompatibel SDK lama (0.1.0a55) dan baru ─────────────────────────
 try:
